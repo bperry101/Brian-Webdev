@@ -35,7 +35,7 @@ class NewsFeed extends Component {
 
     return (
       <Ticker>
-        {() => (<h1 className='wrapping'>{this.state.news.articles.map(e => e.title).join(' ')}</h1>)}
+        {() => (<h1 className='wrapping'>{this.state.news.articles.map(e => e.title).join(' | ')}</h1>)}
       </Ticker>
     )
   }
