@@ -6,19 +6,22 @@ class NewsFeed extends Component {
   constructor() {
     super();
     this.state = {
+      news: {}
+    }
+    this.apiDetails = {
       newsAPIKey: '928d65cb179a414e8b48054c1d15e4a5',
       newsType: 'top-headlines',
       category: 'business',
-      country: 'us',
-      news: {}
+      country: 'us'
     }
   }
 
   async getHeadline() {
-    const url = `https://newsapi.org/v2/${this.state.newsType}?` + 
-                `category=${this.state.category}&` + 
-                `country=${this.state.country}&` + 
-                `apiKey=${this.state.newsAPIKey}`
+    const api = this.apiDetails
+    const url = `https://newsapi.org/v2/${api.newsType}?` + 
+                `category=${api.category}&` + 
+                `country=${api.country}&` + 
+                `apiKey=${api.newsAPIKey}`
     const response = await fetch(url)
     const news = await response.json()
 
@@ -35,7 +38,11 @@ class NewsFeed extends Component {
 
     return (
       <Ticker>
-        {() => (<h1 className='wrapping'>{this.state.news.articles.map(e => e.title).join(' | ')}</h1>)}
+        {() => (
+          <h1 className='wrapping'>
+            {this.state.news.articles.map(e => e.title).join(' | ').concat(' | ')}
+          </h1>
+          )}
       </Ticker>
     )
   }
