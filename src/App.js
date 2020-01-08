@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import Data from './Data'
-import NewsFeed from './NewsFeed'
+import { Data, NewsFeed, ButtonTest, SidebarTest, Topbar } from './Components'
 
 // Class containing the main body of the page
 class App extends Component {
@@ -16,10 +15,22 @@ class App extends Component {
 
     // Display data as table
     return (
-      <div className="container">
-        <Data query={this.state.charts[0].query} />
-        <Data query={this.state.charts[1].query} />
-        <NewsFeed />
+      <div>
+        <Topbar />
+        <div className="ui grid">
+          <div className='row'>
+            <div className='column six wide'>
+              <Data query={this.state.charts[0].query} />
+            </div>
+            <div className='column six wide'>
+              <Data query={this.state.charts[1].query} />
+            </div>
+          </div>        
+          <div className='row'><ButtonTest /></div>
+          <div className='row'>
+            <div className='column sixteen wide'><NewsFeed /></div>          
+          </div>
+        </div>
       </div>
     )
   }

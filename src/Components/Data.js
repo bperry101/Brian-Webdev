@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { Table } from 'semantic-ui-react'
 
 // Define header content
 const TableHeader = (props) => {
-  const header = props.headers.map((h,i) => { return <th key={i}>{h}</th> })
-  return <thead><tr>{header}</tr></thead>
+  const header = props.headers.map((h,i) => { 
+    return <Table.HeaderCell key={i}><div>{h}</div></Table.HeaderCell> 
+  })
+  return <Table.Header><Table.Row>{header}</Table.Row></Table.Header>
 }
 
 // Parse query contents into table
@@ -11,13 +14,15 @@ const BasicTable = (props) => {
   const rows = Object.keys(props.data)
   const tableData = rows.map((k,i) => {
     const row = props.data[k]
-    const rowData = Object.keys(row).map((k,i) => { return <td key={i}>{row[k]}</td> })
+    const rowData = Object.keys(row).map((k,i) => { 
+      return <Table.Cell key={i}><div>{row[k]}</div></Table.Cell> 
+    })
     return (
-      <tr key={i}>{rowData}</tr>
+      <Table.Row key={i}>{rowData}</Table.Row>
     )
   })
 
-return <tbody>{tableData}</tbody>
+return <Table.Body>{tableData}</Table.Body>
 }
 
 // Class for data handling
@@ -74,10 +79,10 @@ class Data extends Component {
     const headers = Object.keys(data[0])
 
     return(
-      <table>
+      <Table color='teal' inverted>
         <TableHeader headers={headers} />
         <BasicTable data={data} />
-      </table>
+      </Table>
     )
   }
 
