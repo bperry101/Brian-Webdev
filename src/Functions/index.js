@@ -1,1 +1,2 @@
-export { default as getData } from './getData'
+export { default as executeQuery } from './executeQuery'
+export { default as executeFunction } from './executeFunction'

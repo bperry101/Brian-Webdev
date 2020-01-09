@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getData } from '../Functions'
+import { executeQuery } from '../Functions'
 import { BasicTable } from  '../Components'
 
 // Class for data handling
@@ -13,7 +13,7 @@ class Data extends Component {
 
   // Call getData() function and update state with the results
   async updateState(kdbQuery) { 
-    this.setState({ data: await getData(kdbQuery) }) 
+    this.setState({ data: await executeQuery(kdbQuery) }) 
   }
 
   // When component mounts, run updateState() every interval

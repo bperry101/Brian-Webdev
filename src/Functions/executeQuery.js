@@ -1,7 +1,7 @@
 // This function executes KDB queries over qREST and passes the returned data to the App
 
 // Fetch data from KDB instance
-const getData = async(kdbQuery) => {
+const executeQuery = async(kdbQuery) => {
   // Define url, kdb params and http params
   const url = 'https://192.168.1.26:8090/executeQuery'
   const kdbParams = {
@@ -25,4 +25,4 @@ const getData = async(kdbQuery) => {
   return queryData.result
 }
 
-export default getData;
+export default executeQuery;

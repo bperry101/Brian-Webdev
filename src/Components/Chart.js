@@ -1,22 +1,23 @@
 import React from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
-const data = [
-  {name: '0', uv: 400, pv: 2400, amt: 2400},
-  {name: '1', uv: 500, pv: 2410, amt: 2400},
-  {name: '2', uv: 478, pv: 2120, amt: 2400},
-  {name: '3', uv: 451, pv: 2250, amt: 2400},
-  {name: '4', uv: 422, pv: 2450, amt: 2400}
-]
-
-const Chart = (props) => {
+const Chart = ({ data, syms }) => {
   
+  // Stall if data is not yet loaded (placeholder)  <MakeLines syms={props.syms} />
+  if (!data) { return <div>Loading chart...</div> }
+
+  const colours = ['#1abc9c', '#f1c40f', '#d35400', '#3498db', '#c0392b', 
+                   '#8e44ad', '#2c3e50', '#7f8c8d', '#f39c12', '#16a085']
+  const pairs = syms.map((s,i) => {return {sym: s, colour: colours[i]}})
+  const lines = pairs.map((p,i) => 
+    <Line type="monotone" dataKey={p.sym} stroke={p.colour} strokeWidth="3" key={i} />
+    )
+
   return (
-  <LineChart width={600} height={300} data={props.data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-    <Line type="monotone" dataKey="uv" stroke="#8884d8" strokeWidth="3" />
-    <Line type="monotone" dataKey="pv" stroke="#82ca9d" strokeWidth="3" />
+  <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>    
+    {lines}
     <CartesianGrid stroke="#ccc" strokeDasharray='5 5' />
-    <XAxis dataKey="name" />
+    <XAxis dataKey="time.i" />
     <YAxis />
     <Tooltip />
   </LineChart>

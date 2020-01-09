@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import { Data, NewsFeed, ButtonTest, Topbar, Chart } from './Components'
-import { getData } from './Functions'
+import { executeQuery, executeFunction } from './Functions'
 
 // Class containing the main body of the page
 class App extends Component {
   // Character array now part of state and so can be altered
   state = {
     charts: [
-      {query: 'select max price by sym, 5 xbar time.second from trade'},
+      {query: 'select max price by sym, 60 xbar time.minute from trade'},
       {query: 'select[-5] from trade'},
       {query: 'exec distinct sym from trade'},
       {query: 'select maxAsk:max ask by sym from quote'}
@@ -18,12 +18,17 @@ class App extends Component {
   // Fetch list of syms (needs to be separate function because it is async)
   async getSyms() {
     const symQuery = 'exec distinct sym from trade'
-    this.setState({ syms: await getData(symQuery) })
+    this.setState({ syms: await executeQuery(symQuery) })
+  }
+
+  async getthing() {
+    this.setState({ thing: await executeFunction('piv', {}) })
   }
 
   // When component mounts get all distinct syms in the trade table
   componentDidMount() {
     this.getSyms()
+    this.getthing()
   }
 
   render() {
@@ -55,7 +60,7 @@ class App extends Component {
           */}
           <div className='row'>
             <div className='column eight wide'>
-              <Chart />
+              <Chart data={this.state.thing} syms={this.state.syms} />
             </div>
           </div>
           <div className='row'><ButtonTest /></div>
