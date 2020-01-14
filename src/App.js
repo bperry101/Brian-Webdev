@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
-import { Data, NewsFeed, ButtonTest, Topbar, Chart } from './Components'
+import { LastFive, Topbar, LineChart, NewsFeed, PieChart, ValueCache } from './Components'
 import { executeQuery, executeFunction } from './Functions'
+import 'semantic-ui-css/semantic.min.css';
+import { Grid } from 'semantic-ui-react'
+import './Components/style.css'
 
 // Class containing the main body of the page
 class App extends Component {
@@ -10,7 +13,8 @@ class App extends Component {
       {query: 'select max price by sym, 60 xbar time.minute from trade'},
       {query: 'select[-5] from trade'},
       {query: 'exec distinct sym from trade'},
-      {query: 'select maxAsk:max ask by sym from quote'}
+      {query: 'select maxAsk:max ask by sym from quote'},
+      {query: 'select last price, last change by sym from update change:signum deltas price by sym from trade'}
     ],
     syms: []
   }
@@ -25,50 +29,49 @@ class App extends Component {
     this.setState({ thing: await executeFunction('piv', {}) })
   }
 
+  async getAmount() {
+    const symQuery = 'desc select sum size by sym from trade'
+    this.setState({ amounts: await executeQuery(symQuery) })
+  }
+
   // When component mounts get all distinct syms in the trade table
   componentDidMount() {
     this.getSyms()
     this.getthing()
+    this.getAmount()
   }
 
   render() {
-
     // Stall if symlist hasn't been fetched (use semantic Placeholder?)
     if (!Object.entries(this.state.syms).length) { return <div>Loading data...</div> }
-
-    // Display data as table
+    console.log(this.state.amounts)
     return (
-      <div>
-        {/*  Create top bar */}
+      <div className="dashboard">
         <Topbar data={this.state.syms} />
-        {/*  Lay out data in a 16x16 grid */}
-        <div className="ui grid">
-          <div className='row'>
-            <div className='column six wide'>
-              <Data query={this.state.charts[1].query} />
-            </div>
-          </div>
-          {/* 
-          <div className='row'>
-            <div className='column six wide' >
-              <Data query={this.state.charts[2].query} />
-            </div>
-            <div className='column six wide' >
-              <Data query={this.state.charts[3].query} />
-            </div>
-          </div>  
-          */}
-          <div className='row'>
-            <div className='column eight wide'>
-              <Chart data={this.state.thing} syms={this.state.syms} />
-            </div>
-          </div>
-          <div className='row'><ButtonTest /></div>
-          <div className='row'>
-            <div className='column sixteen wide'><NewsFeed /></div>          
-          </div>
-        </div>
-      </div>
+        <Grid padded>
+          <Grid.Row className="charts">
+            <Grid.Column width={10}>
+              <LineChart data={this.state.thing} syms={this.state.syms} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+            <ValueCache query={this.state.charts[4].query} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row className="table">
+            <Grid.Column width={10}>
+              <LastFive query={this.state.charts[1].query} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <PieChart data={this.state.amounts} syms={this.state.syms} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row className="news">
+            <Grid.Column width={16}>
+              <NewsFeed/>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>   
     )
   }
 }

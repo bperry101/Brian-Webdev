@@ -1,0 +1,38 @@
+.card{
+    min-height: 100%
+}
+
+#root{
+    background-color: #DEE5E5;
+}
+
+.fixHeight {
+    margin: 0 !important
+}
+
+.whitespace {
+    z-index: 11;
+    height: 100%;
+    margin-top: 3px !important;
+}
+
+.ticker{
+    position: fixed !important;
+    width:98%;
+    bottom: 0px;
+    background-color: #555;
+}
+
+.cardheader{
+    border-bottom: 2px solid lightgrey !important;
+    box-sizing: border-box;
+    height:10%
+}
+
+.increase{
+    background-color:green
+}
+
+.decrease{
+    background-color:red
+}

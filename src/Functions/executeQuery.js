@@ -3,7 +3,7 @@
 // Fetch data from KDB instance
 const executeQuery = async(kdbQuery) => {
   // Define url, kdb params and http params
-  const url = 'https://192.168.1.26:8090/executeQuery'
+  const url = 'https://192.168.1.98:8090/executeQuery'
   const kdbParams = {
     query: kdbQuery,
     response: true,

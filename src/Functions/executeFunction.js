@@ -3,7 +3,7 @@
 // Fetch data from KDB instance
 const executeFunction = async(fname, fargs) => {
   // Define url, kdb params and http params
-  const url = 'https://192.168.1.26:8090/executeFunction'
+  const url = 'https://192.168.1.98:8090/executeFunction'
   const kdbParams = {
     arguments: fargs,
     function_name: fname

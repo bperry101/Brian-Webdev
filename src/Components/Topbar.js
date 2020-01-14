@@ -1,22 +1,28 @@
-import React from 'react'
-import { Menu, Container, Dropdown, Image } from 'semantic-ui-react'
+import React, { Component } from 'react'
+import { Menu } from 'semantic-ui-react'
 
-const MakeDropdown = (props) => {
-  const menu = props.data.map((s, i) => <Dropdown.Item key={i}>{s}</Dropdown.Item>)
-  return <Dropdown item simple text='Options'><Dropdown.Menu>{menu}</Dropdown.Menu></Dropdown>
+import SymSelect from './SymSelect';
+
+export default class Topbar extends Component {
+  state = {}
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  render() {
+    const { activeItem } = this.state
+    return (
+      <Menu className='fixHeight' size='massive' color={'blue'} inverted>
+        <Menu.Item header>Our Company</Menu.Item>
+        <SymSelect className='symSelect' />
+        <Menu.Item
+          name='jobs'
+          active={activeItem === 'jobs'}
+          onClick={this.handleItemClick}
+        />
+        <Menu.Item
+          name='locations'
+          active={activeItem === 'locations'}
+          onClick={this.handleItemClick}
+        />
+      </Menu>
+    )
+  }
 }
-
-const Topbar = (props) => (
-  <Menu fixed='top' inverted>
-    <Container>
-      <Menu.Item header>
-        <Image size='mini' src='../Images/logo1.png' style={{ marginRight: '1.5em' }} />
-        Webdev Project
-      </Menu.Item>
-      <Menu.Item as='a' header>Home</Menu.Item>
-      <MakeDropdown data={props.data} />
-    </Container>
-  </Menu>
-)
-
-export default Topbar;

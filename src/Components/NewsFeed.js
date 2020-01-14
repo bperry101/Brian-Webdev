@@ -33,9 +33,7 @@ class NewsFeed extends Component {
   }
 
   render() {
-
     if (!Object.entries(this.state.news).length) { return <div>Loading news...</div> }
-
     return (
       <Ticker>
         {() => (
@@ -46,8 +44,6 @@ class NewsFeed extends Component {
       </Ticker>
     )
   }
-
-
 }
 
 export default NewsFeed;
