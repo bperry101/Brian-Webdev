@@ -28,7 +28,6 @@ class LastFive extends Component {
 
   // Render content
   render() {
-
     // Stall if data is not yet loaded (placeholder)
     if (!Object.entries(this.state.data).length) { return <div>Loading table...</div> }
     const data = this.state.data
@@ -53,7 +52,6 @@ class LastFive extends Component {
       })
       return <Table.Body>{tableData}</Table.Body>
     }
-
     return   <Card fluid>
     <Card.Content>
       <Header className="cardheader" as='h3'>
@@ -66,7 +64,6 @@ class LastFive extends Component {
     </Card.Content>
   </Card>
   }
-
 }
 
 export default LastFive;

@@ -1,75 +1,96 @@
 import React, {Component} from 'react'
-import { LastFive, Topbar, LineChart, NewsFeed, PieChart, ValueCache } from './Components'
-import { executeQuery, executeFunction } from './Functions'
+import { LastFive, LineChart, NewsFeed, PieChart, ValueCache, CurrentPrice, AveragePrice, Donut, Timeseries } from './Components'
+import { executeFunction } from './Functions'
 import 'semantic-ui-css/semantic.min.css';
-import { Grid } from 'semantic-ui-react'
+import { Grid, Menu, Dropdown,activeItem } from 'semantic-ui-react'
 import './Components/style.css'
 
 // Class containing the main body of the page
 class App extends Component {
   // Character array now part of state and so can be altered
   state = {
-    charts: [
-      {query: 'select max price by sym, 60 xbar time.minute from trade'},
-      {query: 'select[-5] from trade'},
-      {query: 'exec distinct sym from trade'},
-      {query: 'select maxAsk:max ask by sym from quote'},
-      {query: 'select last price, last change by sym from update change:signum deltas price by sym from trade'}
+    selectedSyms: [],
+    activeIndex: 0 ,
+    functions: [
+      'maxminfunc',
+      'volumefunc',
+      'distinctsymfunc',
+      'summarytable',
+      'todayvolatilityfunc',
+      'currenttime2',
+      'average'
     ],
     syms: []
   }
 
   // Fetch list of syms (needs to be separate function because it is async)
   async getSyms() {
-    const symQuery = 'exec distinct sym from trade'
-    this.setState({ syms: await executeQuery(symQuery) })
+    this.setState({ syms: await executeFunction('distinctsymfunc', {}) })
   }
 
-  async getthing() {
-    this.setState({ thing: await executeFunction('piv', {}) })
-  }
 
-  async getAmount() {
-    const symQuery = 'desc select sum size by sym from trade'
-    this.setState({ amounts: await executeQuery(symQuery) })
-  }
 
   // When component mounts get all distinct syms in the trade table
   componentDidMount() {
     this.getSyms()
-    this.getthing()
-    this.getAmount()
   }
 
   render() {
-    // Stall if symlist hasn't been fetched (use semantic Placeholder?)
-    if (!Object.entries(this.state.syms).length) { return <div>Loading data...</div> }
-    console.log(this.state.amounts)
+    const stateOptions = this.state.syms.map(item => ({
+      key: item.sym,
+      text: item.sym,
+      value: item.sym,
+      }))
+    // var selectedSyms= this.state.selectedSyms
+    const handleChange = (e, {value}) => {
+      selectedSyms = value
+    }
+    var selectedSyms = this.state.syms.map(item => (
+      item.sym
+      ))
+    if (!selectedSyms.length) { return <div>Loading table...</div> }
     return (
       <div className="dashboard">
-        <Topbar data={this.state.syms} />
+      <Menu className='fixHeight' size='massive' color={'blue'} inverted fluid>
+        <Menu.Item header>Our Company</Menu.Item>
+        <Dropdown
+          multiple search selection fluid
+          placeholder='State'
+          onChange={handleChange.bind(this)}
+          options={stateOptions}
+          defaultValue={selectedSyms}
+          style= { {color:'red'}} 
+        />
+      </Menu>
         <Grid padded>
           <Grid.Row className="charts">
             <Grid.Column width={10}>
-              <LineChart data={this.state.thing} syms={this.state.syms} />
+              < Donut query={this.state.functions[1]} />
             </Grid.Column>
             <Grid.Column width={6}>
-            <ValueCache query={this.state.charts[4].query} />
+              <ValueCache query={this.state.functions[3]} />
             </Grid.Column>
           </Grid.Row>
+
           <Grid.Row className="table">
-            <Grid.Column width={10}>
-              <LastFive query={this.state.charts[1].query} />
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <PieChart data={this.state.amounts} syms={this.state.syms} />
+            <Grid.Column width={16}> 
+              <Timeseries query={this.state.functions[5]} selectedSyms={selectedSyms} />
+              {/* <CurrentPrice query={this.state.functions[5]} selectedSyms={selectedSyms} /> */}
             </Grid.Column>
           </Grid.Row>
+
+          <Grid.Row className="charts">
+            <Grid.Column width={16}>
+              <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
+            </Grid.Column>
+          </Grid.Row>
+
           <Grid.Row className="news">
             <Grid.Column width={16}>
               <NewsFeed/>
             </Grid.Column>
           </Grid.Row>
+          
         </Grid>
       </div>   
     )

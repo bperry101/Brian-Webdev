@@ -5,13 +5,14 @@ import SymSelect from './SymSelect';
 
 export default class Topbar extends Component {
   state = {}
+ 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   render() {
     const { activeItem } = this.state
     return (
-      <Menu className='fixHeight' size='massive' color={'blue'} inverted>
+      <Menu className='fixHeight' size='massive' color={'blue'} inverted fluid>
         <Menu.Item header>Our Company</Menu.Item>
-        <SymSelect className='symSelect' />
+        <SymSelect className='symSelect' syms={this.props.syms} />
         <Menu.Item
           name='jobs'
           active={activeItem === 'jobs'}
@@ -26,3 +27,5 @@ export default class Topbar extends Component {
     )
   }
 }
+
+

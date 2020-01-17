@@ -1,3 +1,7 @@
+.grid{
+    padding-top: 50px !important;
+}
+
 .card{
     min-height: 100%
 }
@@ -7,7 +11,9 @@
 }
 
 .fixHeight {
-    margin: 0 !important
+    position: fixed;
+    margin: 0 !important;
+    z-index:15
 }
 
 .whitespace {
@@ -35,4 +41,7 @@
 
 .decrease{
     background-color:red
+}
+.dropdown {
+    text-align: center !important
 }
