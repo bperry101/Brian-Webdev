@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts'
-import { Header, Card } from 'semantic-ui-react'
+import { Header, Card, Table, Label } from 'semantic-ui-react'
 import { executeFunction } from '../Functions'
+import './donut.css'
 
 
 
@@ -32,12 +33,42 @@ class Donut extends Component {
     // Render content
 
   render() {
+    const data = this.state.data
+    const headers = ['Sym', 'Size']
+    const TableHeader = (props) => {
+        const header = props.headers.map((h,i) => { 
+          return <Table.HeaderCell key={i}><div>{h}</div></Table.HeaderCell> 
+        })
+        return <Table.Header><Table.Row>{header}</Table.Row></Table.Header>
+      }
+    const TableContents = (props) => {
+        const rows = Object.keys(props.data)
+        const numberWithCommas = (x) => {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
+        const tableData = rows.map((k,i) => {
+          const row = props.data[k]
+          const newObject= {
+            'Sym': row.sym,
+            'Size': numberWithCommas(row.size),
+        };
+          const rowData = Object.keys(newObject).map((k,i) => { 
+            return <Table.Cell key={i}><div>
+              {newObject[k]}
+              </div></Table.Cell> 
+          })
+          return (
+            <Table.Row key={i}>{rowData}</Table.Row>
+          )
+        })
+        return <Table.Body>{tableData}</Table.Body>
+      }
     const options= {
         labels: [],
         legend: {
             itemMargin: {
                 horizontal: 5,
-                vertical: 9
+                vertical: 12
             },
         },
         colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
@@ -55,14 +86,21 @@ class Donut extends Component {
         <Card fluid>
           <Card.Content>
             <Header className="cardheader" as='h3'>
-            Volume
+                Volume
             </Header>
-              <Chart 
-              options={options} 
-              series={series} 
-              type="donut" 
-              width="500" 
-              />
+            <div className="donut-container">
+                <Chart className="donut-chart"
+                  options={options} 
+                  series={series} 
+                  type="donut" 
+                  width="240%" 
+                />
+
+                <Table className="donut-table">
+                    <TableHeader headers={headers} />
+                    <TableContents data={data} />
+                </Table>
+            </div>
           </Card.Content>
         </Card>
       </div>

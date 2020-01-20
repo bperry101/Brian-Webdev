@@ -8,4 +8,6 @@ export { default as CurrentPrice } from './CurrentPrice'
 export { default as AveragePrice } from './AveragePrice'
 export { default as Donut } from './donut'
 export { default as Timeseries } from './Timeseries'
+export { default as Volatility } from './Volatility'
+
 

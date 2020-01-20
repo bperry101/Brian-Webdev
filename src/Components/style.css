@@ -3,6 +3,7 @@
 }
 
 .card{
+    height: 100%;
     min-height: 100%
 }
 
@@ -32,7 +33,6 @@
 .cardheader{
     border-bottom: 2px solid lightgrey !important;
     box-sizing: border-box;
-    height:10%
 }
 
 .increase{
@@ -45,3 +45,9 @@
 .dropdown {
     text-align: center !important
 }
+
+.dropdown:nth-child(2) {
+    color: #1f77b4 !important
+}
+
+

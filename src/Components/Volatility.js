@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { executeFunction } from '../Functions'
-import changeDate from './changeDate'
+import { executeFunction } from '../Functions';
+import volDates from './volDates';
 
 
-class Timeseries extends Component {
+class Volatility extends Component {
 
     
         constructor(props) {
-            var dateArr = changeDate();
+            var dateArr = volDates();
             super(props);
           this.state = {
             dateArr: dateArr,
@@ -71,7 +71,8 @@ class Timeseries extends Component {
                     enabled:false,
                     },
                 type: 'datetime',
-                min: dateArr[3],
+                max: dateArr[0],
+                min: dateArr[dateArr.length - 1],
               },
               fill: {
                 type: 'gradient',
@@ -82,7 +83,7 @@ class Timeseries extends Component {
                 }
               },
             },
-            selection: 'three_days',
+            selection: 'four_weeks',
           };
         }
             
@@ -93,27 +94,14 @@ class Timeseries extends Component {
         this.setState({ hdbdata: await executeFunction(hdb, {}) }) 
         const rdbData = this.state.rdbdata
         this.setState({ totalData: this.state.hdbdata.map((row, i) => {
-            const priceArray = rdbData[i].price
+            const priceArray = rdbData[i].volatility
             const timeArray = rdbData[i].time
-            row.price = row.price.concat(priceArray)
+            row.volatility = row.volatility.concat(priceArray)
             row.time = row.time.concat(timeArray)
             return row
         })
     })
       }
-    
-        // joinData() {
-            
-        //     const rdbData = this.state.rdbdata
-        //     this.setState({ totalData: this.state.hdbdata.map((row, i) => {
-        //         const priceArray = rdbData[i].price
-        //         const timeArray = rdbData[i].time
-        //         row.price = row.price.concat(priceArray)
-        //         row.time = row.time.concat(timeArray)
-        //         return row
-        //     })
-        // })
-        // }
     
       // When component mounts, run updateState() every interval
       componentDidMount() {
@@ -140,24 +128,27 @@ class Timeseries extends Component {
                 options: {
                   xaxis: {
                     min: this.state.dateArr[1],
+                    max: this.state.dateArr[0],
                   }
                 }
               })
               break;
-            case 'two_days':
+            case 'one_week':
               this.setState({
                 options: {
                   xaxis: {
                     min: this.state.dateArr[2],
+                    max: this.state.dateArr[0],
                   }
                 }
               })
               break;
-            case 'three_days':
+            case 'four_weeks':
               this.setState({
                 options: {
                   xaxis: {
-                    min: this.state.dateArr[3],
+                    min: this.state.dateArr[5],
+                    max: this.state.dateArr[0],
                   }
                 }
               })
@@ -170,7 +161,7 @@ class Timeseries extends Component {
         render() {
             const graphData = this.state.totalData.map(row => {
                 let name = row.sym
-                let data = row.time.map((item, i) => [item, row.price[i]] )
+                let data = row.time.map((item, i) => [item, row.volatility[i]] )
                 return {name: name, data: data}
             })
           return (
@@ -178,23 +169,23 @@ class Timeseries extends Component {
             <Card fluid>
               <Card.Content>
                 <Header className="cardheader" as='h3'>
-                Current Price
+                Volatility
                 </Header>
                 <div id="chart">
                     <div className="toolbar">
                         <Button id="one_day" 
                             onClick={()=>this.updateData('one_day')} className={ (this.state.selection==='one_day' ? 'active' : '')}>        
-                            1 Day
+                            Yesterday
                         </Button>
                         &nbsp;
-                        <Button id="two_days"
-                            onClick={()=>this.updateData('two_days')} className={ (this.state.selection==='two_days' ? 'active' : '')}>
-                        2 Days
+                        <Button id="one_week"
+                            onClick={()=>this.updateData('one_week')} className={ (this.state.selection==='one_week' ? 'active' : '')}>
+                        1 Week
                         </Button>
                         &nbsp;
-                        <Button id="three_days"
-                            onClick={()=>this.updateData('three_days')} className={ (this.state.selection==='three_days' ? 'active' : '')}>
-                        3 Days
+                        <Button id="four_weeks"
+                            onClick={()=>this.updateData('four_weeks')} className={ (this.state.selection==='four_weeks' ? 'active' : '')}>
+                        4 Weeks
                         </Button>
                         &nbsp;
                     </div>
@@ -208,4 +199,4 @@ class Timeseries extends Component {
     );
   }
 }
-export default Timeseries;
+export default Volatility;

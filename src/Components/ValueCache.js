@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { executeFunction } from '../Functions'
-import { Table } from 'semantic-ui-react'
+import { Table, Icon } from 'semantic-ui-react'
 import { Header, Card, Modal, Button } from 'semantic-ui-react'
-import './style.css'
 
 // Class for data handling
 class ValueCache extends Component {
@@ -21,7 +20,7 @@ class ValueCache extends Component {
   // When component mounts, run updateState() every interval
   componentDidMount() {
     this.updateState(this.props.query)
-    this.interval = setInterval(() => this.updateState(this.props.query), 10000)
+    this.interval = setInterval(() => this.updateState(this.props.query), 1000)
   }
 
   // Garbage collection
@@ -52,17 +51,25 @@ class ValueCache extends Component {
         const newObject= {
           'Sym': row.sym,
           'Min Traded Price': row.mintradedprice,
-          'Last Traded Price': row.lasttradedprice,
           'Max Traded Price': row.maxtradedprice,
+          'Last Traded Price': row.lasttradedprice,
           'Change': row.change
       };
         const rowData = Object.keys(newObject).map((k,i) => { 
           return <Table.Cell key={i}><div>
-            {newObject[k]}
+            
+            { (k=='Change' && newObject[k] == 1) ? <Icon color='green' name='arrow circle up' /> :
+             (k=='Change' && newObject[k] == -1) ? <Icon color='red' name='arrow circle down' /> :
+             (k=='Change' && newObject[k] == 0) ? <Icon color='grey' name='minus circle' /> :
+             newObject[k]
+              }
+          
             </div></Table.Cell> 
         })
         return (
-          <Table.Row   className= { newObject.Change === 1 ? "increase" : newObject.Change === 0 ? "level" : "decrease" } key={i}>{rowData}</Table.Row>
+          <Table.Row  
+      // className= { newObject.Change === 1 ? "increase" : newObject.Change === 0 ? "level" : "decrease" } 
+          key={i}>{rowData}</Table.Row>
         )
       })
       return <Table.Body>{tableData}</Table.Body>
@@ -72,7 +79,7 @@ class ValueCache extends Component {
         <Header className="cardheader" as='h3'>
           Last Value Cache
         </Header>
-          <Table inverted>
+          <Table>
             <TableHeader headers={headers} />
             <TableContents data={data} />
           </Table>

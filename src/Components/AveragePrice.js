@@ -42,6 +42,11 @@ class AveragePrice extends Component {
       dataLabels: {
         enabled: false
       },
+      legend:{
+        itemMargin: {
+          vertical: 30
+        } 
+      },
       stroke: {
         curve: 'straight'
       },

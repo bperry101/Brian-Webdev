@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import { LastFive, LineChart, NewsFeed, PieChart, ValueCache, CurrentPrice, AveragePrice, Donut, Timeseries } from './Components'
+import { LastFive, LineChart, NewsFeed, PieChart, ValueCache, CurrentPrice, AveragePrice, Donut, Timeseries, Volatility } from './Components'
 import { executeFunction } from './Functions'
 import 'semantic-ui-css/semantic.min.css';
-import { Grid, Menu, Dropdown,activeItem } from 'semantic-ui-react'
+import { Grid, Menu, Dropdown,Image } from 'semantic-ui-react'
 import './Components/style.css'
+import logo from './Components/datascape.png'
 
 // Class containing the main body of the page
 class App extends Component {
@@ -18,7 +19,9 @@ class App extends Component {
       'summarytable',
       'todayvolatilityfunc',
       'currenttime2',
-      'average'
+      'average',
+      'currenttime1',
+      'volatilityfunc'
     ],
     syms: []
   }
@@ -41,6 +44,9 @@ class App extends Component {
       text: item.sym,
       value: item.sym,
       }))
+      const labelOptions = this.state.syms.map(item => ({
+        className: item.sym,
+        }))
     // var selectedSyms= this.state.selectedSyms
     const handleChange = (e, {value}) => {
       selectedSyms = value
@@ -52,14 +58,14 @@ class App extends Component {
     return (
       <div className="dashboard">
       <Menu className='fixHeight' size='massive' color={'blue'} inverted fluid>
-        <Menu.Item header>Our Company</Menu.Item>
+      <Image src={logo} size='small' />
         <Dropdown
           multiple search selection fluid
-          placeholder='State'
+          placeholder='Select Syms'
           onChange={handleChange.bind(this)}
           options={stateOptions}
+          values={labelOptions}
           defaultValue={selectedSyms}
-          style= { {color:'red'}} 
         />
       </Menu>
         <Grid padded>
@@ -74,14 +80,19 @@ class App extends Component {
 
           <Grid.Row className="table">
             <Grid.Column width={16}> 
-              <Timeseries query={this.state.functions[5]} selectedSyms={selectedSyms} />
-              {/* <CurrentPrice query={this.state.functions[5]} selectedSyms={selectedSyms} /> */}
+              <Timeseries hdbquery={this.state.functions[7]} rdbquery={this.state.functions[5]} selectedSyms={selectedSyms} />
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row className="charts">
             <Grid.Column width={16}>
               <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row className="table">
+            <Grid.Column width={16}> 
+              <Volatility hdbquery={this.state.functions[8]} rdbquery={this.state.functions[4]} selectedSyms={selectedSyms} />
             </Grid.Column>
           </Grid.Row>
 
@@ -97,4 +108,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default App 
