@@ -1,9 +1,40 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align="center">Welcome to Webdev 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
+</p>
 
-## BestWebDevTeam financial data dashboard
-This project depends on the following packages:
+> AquaQ Web Development training project
+
+## Install
+
+```sh
+npm installsematic-ui-css
+npm install sematic-ui-react
+npm install react-ticker
+npm install react-apexcharts apexcharts
 ```
-material-ui
-react-ticker
+
+## Usage
+
+```sh
+npm start
 ```
-"# Brian-Webdev" 
+
+## Run tests
+
+```sh
+npm run test
+```
+
+## Author
+
+👤 **Michael Potter**
+
+* Github: [@mpotterq](https://github.com/mpotterq)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
