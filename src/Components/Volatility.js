@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { Header, Card, Button } from 'semantic-ui-react';
 import { executeFunction, volDates } from '../Functions';
-
+import ModalBox from './modal';
 
 class Volatility extends Component {
 
@@ -158,11 +158,14 @@ class Volatility extends Component {
         }
  
         render() {
-            const graphData = this.state.totalData.map(row => {
-                let name = row.sym
-                let data = row.time.map((item, i) => [item, row.volatility[i]] )
-                return {name: name, data: data}
-            })
+          const graphData = []
+          this.state.totalData.map(row => {
+           if (this.props.selectedSyms.includes(row.sym)) {
+             let name = row.sym
+             let data = row.time.map((item, i) => [item, row.volatility[i]] )
+             graphData.push ({name: name, data: data})
+           }
+         })
           return (
             <div className="timeseries">
             <Card fluid>
@@ -191,7 +194,34 @@ class Volatility extends Component {
                     <div id="chart-timeline">
                     <Chart options={this.state.options} series={graphData} type="area" height={350} />
                     </div>
+
+                    
                 </div>
+                <ModalBox content={<div id="chart">
+                    <div className="toolbar">
+                        <Button id="one_day" 
+                            onClick={()=>this.updateData('one_day')} className={ (this.state.selection==='one_day' ? 'active' : '')}>        
+                            Yesterday
+                        </Button>
+                        &nbsp;
+                        <Button id="one_week"
+                            onClick={()=>this.updateData('one_week')} className={ (this.state.selection==='one_week' ? 'active' : '')}>
+                        1 Week
+                        </Button>
+                        &nbsp;
+                        <Button id="four_weeks"
+                            onClick={()=>this.updateData('four_weeks')} className={ (this.state.selection==='four_weeks' ? 'active' : '')}>
+                        4 Weeks
+                        </Button>
+                        &nbsp;
+                    </div>
+                    <div id="chart-timeline">
+                    <Chart options={this.state.options} series={graphData} type="area" height={700} />
+                    </div>
+
+                    
+                </div>}
+                title={<Header as='h3'>Volatility</Header>} />
             </Card.Content>
         </Card>
     </div>

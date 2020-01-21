@@ -1,5 +1,5 @@
 .grid{
-    padding-top: 50px !important;
+    padding-top: 80px !important;
 }
 
 .card{
@@ -14,6 +14,7 @@
 .fixHeight {
     position: fixed;
     margin: 0 !important;
+    background-color:rgb(58, 58, 58) !important;
     z-index:15
 }
 
@@ -82,4 +83,13 @@
 }
 .dropdown :nth-child(10){
     color:#17becf;
+}
+
+.ui.fullscreen.modal {
+    left: auto !important;
+}
+
+.ui.label {
+    margin-top: 15px !important;
+    font-size: 1.2em !important;
 }

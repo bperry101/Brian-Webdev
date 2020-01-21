@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { executeFunction } from '../Functions'
 import { Table, Icon } from 'semantic-ui-react'
-import { Header, Card, Modal, Button } from 'semantic-ui-react'
+import { Header, Card } from 'semantic-ui-react'
 
 // Class for data handling
 class ValueCache extends Component {
@@ -58,9 +58,9 @@ class ValueCache extends Component {
         const rowData = Object.keys(newObject).map((k,i) => { 
           return <Table.Cell key={i}><div>
             
-            { (k=='Change' && newObject[k] == 1) ? <Icon color='green' name='arrow circle up' /> :
-             (k=='Change' && newObject[k] == -1) ? <Icon color='red' name='arrow circle down' /> :
-             (k=='Change' && newObject[k] == 0) ? <Icon color='grey' name='minus circle' /> :
+            { (k==='Change' && newObject[k] === 1) ? <Icon color='green' name='arrow circle up' /> :
+             (k==='Change' && newObject[k] === -1) ? <Icon color='red' name='arrow circle down' /> :
+             (k==='Change' && newObject[k] === 0) ? <Icon color='grey' name='minus circle' /> :
              newObject[k]
               }
           

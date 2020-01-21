@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts'
-import { Header, Card, Table, Label } from 'semantic-ui-react'
+import { Header, Card, Table } from 'semantic-ui-react'
 import { executeFunction } from '../Functions'
 
 
@@ -20,7 +20,7 @@ class Donut extends Component {
     // When component mounts, run updateState() every interval
     componentDidMount() {
       this.updateState(this.props.query)
-      this.interval = setInterval(() => this.updateState(this.props.query), 15000)
+      this.interval = setInterval(() => this.updateState(this.props.query), 5000)
     }
   
     // Garbage collection
@@ -38,7 +38,9 @@ class Donut extends Component {
         return <Table.Header><Table.Row>{header}</Table.Row></Table.Header>
       }
     const TableContents = (props) => {
-        const rows = Object.keys(props.data)
+        const rows = Object.keys(props.data.sort(function(a, b) {
+          return b.size - a.size;
+      }))
         const numberWithCommas = (x) => {
           return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       };
@@ -62,6 +64,7 @@ class Donut extends Component {
     const options= {
         labels: [],
         legend: {
+            position: 'left',
             itemMargin: {
                 horizontal: 5,
                 vertical: 11

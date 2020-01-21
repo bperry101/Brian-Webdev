@@ -1,17 +1,17 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { NewsFeed, ValueCache, AveragePrice, Donut, Timeseries, Volatility } from './Components'
 import { executeFunction } from './Functions'
 import 'semantic-ui-css/semantic.min.css';
-import { Grid, Menu, Dropdown,Image } from 'semantic-ui-react'
+import { Grid, Menu, Dropdown, Image } from 'semantic-ui-react'
 import './Components/style.css'
-import logo from './Images/datascape.png'
+import logo from './Images/datascapelogo.png'
 
 // Class containing the main body of the page
 class App extends Component {
   // Character array now part of state and so can be altered
   state = {
     selectedSyms: [],
-    activeIndex: 0 ,
+    activeIndex: 0,
     functions: [
       'maxminfunc',
       'volumefunc',
@@ -28,7 +28,18 @@ class App extends Component {
 
   // Fetch list of syms (needs to be separate function because it is async)
   async getSyms() {
-    this.setState({ syms: await executeFunction('distinctsymfunc', {}) })
+    const syms = await executeFunction('distinctsymfunc', {})
+    const stateOptions = syms.map(item => ({
+      key: item.sym,
+      text: item.sym,
+      value: item.sym,
+    }))
+    var selectedSyms = syms.map(item => item.sym)
+    this.setState({
+      stateOptions,
+      selectedSyms
+    })
+
   }
 
 
@@ -38,40 +49,32 @@ class App extends Component {
     this.getSyms()
   }
 
+  handleChange = (e, { value }) => {
+    this.setState({
+      selectedSyms: value.sort()
+    })
+  }
+
   render() {
-    const stateOptions = this.state.syms.map(item => ({
-      key: item.sym,
-      text: item.sym,
-      value: item.sym,
-      }))
-      const labelOptions = this.state.syms.map(item => ({
-        className: item.sym,
-        }))
     // var selectedSyms= this.state.selectedSyms
-    const handleChange = (e, {value}) => {
-      selectedSyms = value
-      console.log(selectedSyms)
-    }
-    var selectedSyms = this.state.syms.map(item => (
-      item.sym
-      ))
-    if (!selectedSyms.length) { return <div>Loading table...</div> }
+
+    if (!this.state.selectedSyms.length) { return <div>Loading table...</div> }
     return (
       <div className="dashboard">
-      <Menu className='fixHeight' size='massive' color={'blue'} inverted fluid>
-      <Image src={logo} size='small' />
-        <Dropdown
-          multiple search selection fluid
-          placeholder='Select Syms'
-          onChange={handleChange.bind(this)}
-          options={stateOptions}
-          defaultValue={selectedSyms}
-        />
-      </Menu>
+        <Menu className='fixHeight' size='massive' inverted fluid>
+          <Image src={logo} size='tiny' />
+          <Dropdown
+            multiple search selection fluid
+            placeholder='Select Syms'
+            onChange={this.handleChange.bind(this)}
+            options={this.state.stateOptions}
+            defaultValue={this.state.selectedSyms}
+          />
+        </Menu>
         <Grid padded>
           <Grid.Row className="charts">
             <Grid.Column width={10}>
-              < Donut query={this.state.functions[1]} />
+              < Donut query={this.state.functions[1]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
             <Grid.Column width={6}>
               <ValueCache query={this.state.functions[3]} />
@@ -79,13 +82,13 @@ class App extends Component {
           </Grid.Row>
 
           <Grid.Row className="table">
-          <Grid.Column width={7}>
-              <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
+            <Grid.Column width={7}>
+              <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
-            <Grid.Column width={9}> 
-              <Timeseries hdbquery={this.state.functions[7]} rdbquery={this.state.functions[5]} selectedSyms={selectedSyms} />
+            <Grid.Column width={9}>
+              <Timeseries hdbquery={this.state.functions[7]} rdbquery={this.state.functions[5]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
-            
+
           </Grid.Row>
 
           {/* <Grid.Row className="charts">
@@ -95,19 +98,19 @@ class App extends Component {
           </Grid.Row> */}
 
           <Grid.Row className="table">
-            <Grid.Column width={16}> 
-              <Volatility hdbquery={this.state.functions[8]} rdbquery={this.state.functions[4]} selectedSyms={selectedSyms} />
+            <Grid.Column width={16}>
+              <Volatility hdbquery={this.state.functions[8]} rdbquery={this.state.functions[4]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row className="news">
             <Grid.Column width={16}>
-              <NewsFeed/>
+              <NewsFeed />
             </Grid.Column>
           </Grid.Row>
-          
+
         </Grid>
-      </div>   
+      </div>
     )
   }
 }

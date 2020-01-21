@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { executeFunction } from '../Functions'
 import { Header, Card } from 'semantic-ui-react'
 import Chart from "react-apexcharts";
+import ModalBox from './modal';
 
 // Class for data handling
 class AveragePrice extends Component {
@@ -20,7 +21,7 @@ class AveragePrice extends Component {
     // When component mounts, run updateState() every interval
     componentDidMount() {
       this.updateState(this.props.query)
-      this.interval = setInterval(() => this.updateState(this.props.query), 1000000)
+      this.interval = setInterval(() => this.updateState(this.props.query), 3000000)
     }
   
     // Garbage collection
@@ -33,7 +34,9 @@ class AveragePrice extends Component {
       if (!Object.entries(this.state.data).length) { return <div>Loading table...</div> }
     const prices = []
     this.state.data.map(item => {
+      if (this.props.selectedSyms.includes(item.sym)) {
         prices.push({name: item.sym, data:item.average})
+      }
     })
     const series = prices
     const chartOptions = {
@@ -75,6 +78,15 @@ class AveragePrice extends Component {
           width="100%"
           className="average"
           />
+        <ModalBox content={<Chart
+          options={chartOptions}
+          series={series}
+          type="line"
+          height="700px"
+          width="100%"
+          className="average"
+          />}
+          title={<Header as='h3'>Average Price</Header>} />
     </Card.Content>
   </Card>
   }

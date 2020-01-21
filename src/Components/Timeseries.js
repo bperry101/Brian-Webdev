@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { executeFunction, changeDate } from '../Functions'
+import { executeFunction, changeDate } from '../Functions';
+import ModalBox from './modal';
 
 
 class Timeseries extends Component {
@@ -101,19 +102,6 @@ class Timeseries extends Component {
     })
       }
     
-        // joinData() {
-            
-        //     const rdbData = this.state.rdbdata
-        //     this.setState({ totalData: this.state.hdbdata.map((row, i) => {
-        //         const priceArray = rdbData[i].price
-        //         const timeArray = rdbData[i].time
-        //         row.price = row.price.concat(priceArray)
-        //         row.time = row.time.concat(timeArray)
-        //         return row
-        //     })
-        // })
-        // }
-    
       // When component mounts, run updateState() every interval
       componentDidMount() {
         // this.setState.changeDate()
@@ -165,12 +153,15 @@ class Timeseries extends Component {
         
           }
         }
- 
+
         render() {
-            const graphData = this.state.totalData.map(row => {
+          const graphData = []
+             this.state.totalData.map(row => {
+              if (this.props.selectedSyms.includes(row.sym)) {
                 let name = row.sym
                 let data = row.time.map((item, i) => [item, row.price[i]] )
-                return {name: name, data: data}
+                graphData.push ({name: name, data: data})
+              }
             })
           return (
             <div className="timeseries">
@@ -199,6 +190,32 @@ class Timeseries extends Component {
                     </div>
                     <div id="chart-timeline">
                     <Chart options={this.state.options} series={graphData} type="area" height={350} />
+                    <ModalBox content={
+                      <div>
+                        <div className="toolbar">
+                            <Button id="one_day" 
+                                onClick={()=>this.updateData('one_day')} className={ (this.state.selection==='one_day' ? 'active' : '')}>        
+                                1 Day
+                            </Button>
+                            &nbsp;
+                            <Button id="two_days"
+                                onClick={()=>this.updateData('two_days')} className={ (this.state.selection==='two_days' ? 'active' : '')}>
+                            2 Days
+                            </Button>
+                            &nbsp;
+                            <Button id="three_days"
+                                onClick={()=>this.updateData('three_days')} className={ (this.state.selection==='three_days' ? 'active' : '')}>
+                            3 Days
+                            </Button>
+                            &nbsp;
+                        </div>
+
+                        <Chart options={this.state.options} series={graphData} type="area" height={700} />
+                        </div>
+
+                      }
+                      title={<Header as='h3'>Current Price</Header>}
+                    />
                     </div>
                 </div>
             </Card.Content>
