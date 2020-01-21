@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Chart from 'react-apexcharts'
 import { Header, Card, Table, Label } from 'semantic-ui-react'
 import { executeFunction } from '../Functions'
-import './donut.css'
-
 
 
 class Donut extends Component {
@@ -29,8 +27,6 @@ class Donut extends Component {
     componentWillUnmount() {
       clearInterval(this.interval)
     }
-  
-    // Render content
 
   render() {
     const data = this.state.data
@@ -68,7 +64,7 @@ class Donut extends Component {
         legend: {
             itemMargin: {
                 horizontal: 5,
-                vertical: 12
+                vertical: 11
             },
         },
         colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
@@ -82,7 +78,6 @@ class Donut extends Component {
             series.push(item.size)
         ))
     return (
-      <div className="donut">
         <Card fluid>
           <Card.Content>
             <Header className="cardheader" as='h3'>
@@ -93,9 +88,8 @@ class Donut extends Component {
                   options={options} 
                   series={series} 
                   type="donut" 
-                  width="240%" 
+                  width="230%" 
                 />
-
                 <Table className="donut-table">
                     <TableHeader headers={headers} />
                     <TableContents data={data} />
@@ -103,7 +97,6 @@ class Donut extends Component {
             </div>
           </Card.Content>
         </Card>
-      </div>
     );
   }
 }

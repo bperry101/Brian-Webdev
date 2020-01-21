@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { executeFunction } from '../Functions'
-import changeDate from './changeDate'
+import { executeFunction, changeDate } from '../Functions'
 
 
 class Timeseries extends Component {

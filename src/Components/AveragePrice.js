@@ -71,8 +71,9 @@ class AveragePrice extends Component {
           options={chartOptions}
           series={series}
           type="line"
-          height="400px"
+          height="350px"
           width="100%"
+          className="average"
           />
     </Card.Content>
   </Card>

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import { LastFive, LineChart, NewsFeed, PieChart, ValueCache, CurrentPrice, AveragePrice, Donut, Timeseries, Volatility } from './Components'
+import { NewsFeed, ValueCache, AveragePrice, Donut, Timeseries, Volatility } from './Components'
 import { executeFunction } from './Functions'
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, Menu, Dropdown,Image } from 'semantic-ui-react'
 import './Components/style.css'
-import logo from './Components/datascape.png'
+import logo from './Images/datascape.png'
 
 // Class containing the main body of the page
 class App extends Component {
@@ -50,6 +50,7 @@ class App extends Component {
     // var selectedSyms= this.state.selectedSyms
     const handleChange = (e, {value}) => {
       selectedSyms = value
+      console.log(selectedSyms)
     }
     var selectedSyms = this.state.syms.map(item => (
       item.sym
@@ -64,7 +65,6 @@ class App extends Component {
           placeholder='Select Syms'
           onChange={handleChange.bind(this)}
           options={stateOptions}
-          values={labelOptions}
           defaultValue={selectedSyms}
         />
       </Menu>
@@ -79,16 +79,20 @@ class App extends Component {
           </Grid.Row>
 
           <Grid.Row className="table">
-            <Grid.Column width={16}> 
+          <Grid.Column width={7}>
+              <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
+            </Grid.Column>
+            <Grid.Column width={9}> 
               <Timeseries hdbquery={this.state.functions[7]} rdbquery={this.state.functions[5]} selectedSyms={selectedSyms} />
             </Grid.Column>
+            
           </Grid.Row>
 
-          <Grid.Row className="charts">
+          {/* <Grid.Row className="charts">
             <Grid.Column width={16}>
               <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
             </Grid.Column>
-          </Grid.Row>
+          </Grid.Row> */}
 
           <Grid.Row className="table">
             <Grid.Column width={16}> 

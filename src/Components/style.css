@@ -35,19 +35,51 @@
     box-sizing: border-box;
 }
 
-.increase{
-    background-color:green
-}
-
-.decrease{
-    background-color:red
-}
 .dropdown {
     text-align: center !important
 }
 
-.dropdown:nth-child(2) {
-    color: #1f77b4 !important
+.donut-container {
+    display: flex;
+}
+
+.donut-table {
+    margin: 0 !important;
+}
+
+.average {
+    margin-top: 50px;
 }
 
 
+
+.dropdown :nth-child(1){
+    color:#1f77b4;
+}
+.dropdown :nth-child(2){
+    color:#ff7f0e;
+}
+.dropdown :nth-child(3){
+    color:#2ca02c;
+}
+.dropdown :nth-child(4){
+    color:#d62728;
+}
+.dropdown :nth-child(5){
+    color:#9467bd;
+}
+.dropdown :nth-child(6){
+    color:#8c564b;
+}
+.dropdown :nth-child(7){
+    color:#e377c2;
+}
+.dropdown :nth-child(8){
+    color:#7f7f7f;
+}
+.dropdown :nth-child(9){
+    color:#bcbd22;
+}
+.dropdown :nth-child(10){
+    color:#17becf;
+}

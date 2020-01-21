@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { executeFunction } from '../Functions';
-import volDates from './volDates';
+import { executeFunction, volDates } from '../Functions';
 
 
 class Volatility extends Component {
