@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Chart from 'react-apexcharts'
+import ReactApexChart from 'react-apexcharts'
 import { Header, Card, Table } from 'semantic-ui-react'
-import { executeFunction } from '../Functions'
-
+import { executeFunction, sorting } from '../Functions'
 
 class Donut extends Component {
     constructor(props) {
@@ -20,7 +19,7 @@ class Donut extends Component {
     // When component mounts, run updateState() every interval
     componentDidMount() {
       this.updateState(this.props.query)
-      this.interval = setInterval(() => this.updateState(this.props.query), 5000)
+      this.interval = setInterval(() => this.updateState(this.props.query), 1000)
     }
   
     // Garbage collection
@@ -29,57 +28,79 @@ class Donut extends Component {
     }
 
   render() {
-    const data = this.state.data
-    const headers = ['Sym', 'Size']
-    const TableHeader = (props) => {
-        const header = props.headers.map((h,i) => { 
-          return <Table.HeaderCell key={i}><div>{h}</div></Table.HeaderCell> 
-        })
-        return <Table.Header><Table.Row>{header}</Table.Row></Table.Header>
-      }
-    const TableContents = (props) => {
-        const rows = Object.keys(props.data.sort(function(a, b) {
-          return b.size - a.size;
-      }))
-        const numberWithCommas = (x) => {
-          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      };
-        const tableData = rows.map((k,i) => {
-          const row = props.data[k]
-          const newObject= {
-            'Sym': row.sym,
-            'Size': numberWithCommas(row.size),
-        };
-          const rowData = Object.keys(newObject).map((k,i) => { 
-            return <Table.Cell key={i}><div>
-              {newObject[k]}
-              </div></Table.Cell> 
-          })
-          return (
-            <Table.Row key={i}>{rowData}</Table.Row>
-          )
-        })
-        return <Table.Body>{tableData}</Table.Body>
-      }
-    const options= {
-        labels: [],
-        legend: {
-            position: 'left',
-            itemMargin: {
-                horizontal: 5,
-                vertical: 11
-            },
+  //   const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+  //   '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+  //   const initData = this.state.data.map((item, i) => {
+  //     return {size: item.size, sym: item.sym, color:colors[i]}
+  //   }
+  //   )
+    
+  //   const data = initData.sort(function(a, b) {
+  //     return b.size - a.size;
+  // })
+    
+      const data = sorting(this.state.data);
+     const series= [{
+        data: data.map(item => item.size)
+      }]
+      const options= {
+        chart: {
+          type: 'bar',
         },
-        colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-                 '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        plotOptions: {
+          bar: {
+            barHeight: '80%',
+            distributed: true,
+            horizontal: true,
+            dataLabels: {
+              position: 'bottom'
+            },
+          }
+        },
+        colors: data.map((item) => {
+          return item.color
+        }),
+        dataLabels: {
+          enabled: true,
+          textAnchor: 'start',
+          style: {
+            colors: ['#fff'],
+            fontSize: 18
+          },
+          formatter: function (val, opt) {
+            return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+          },
+          offsetX: 0,
+          dropShadow: {
+            enabled: true
+          }
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        xaxis: {
+          categories: data.map(item => item.sym)
+        },
+        yaxis: {
+          labels: {
+            show: false
+          }
+        },
+        tooltip: {
+          theme: 'dark',
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function () {
+                return ''
+              }
+            }
+          }
+        }
       }
-    const series= []
-    this.state.data.map(item => (
-       options.labels.push(item.sym)
-        ))
-        this.state.data.map(item => (
-            series.push(item.size)
-        ))
     return (
         <Card fluid>
           <Card.Content>
@@ -87,16 +108,13 @@ class Donut extends Component {
                 Volume
             </Header>
             <div className="donut-container">
-                <Chart className="donut-chart"
+                <ReactApexChart  className="donut-chart"
                   options={options} 
                   series={series} 
-                  type="donut" 
-                  width="230%" 
+                  type="bar" 
+                  height= {430}
+                  width="100%" 
                 />
-                <Table className="donut-table">
-                    <TableHeader headers={headers} />
-                    <TableContents data={data} />
-                </Table>
             </div>
           </Card.Content>
         </Card>
@@ -104,3 +122,5 @@ class Donut extends Component {
   }
 }
 export default Donut;
+
+

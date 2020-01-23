@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NewsFeed, ValueCache, AveragePrice, Donut, Timeseries, Volatility } from './Components'
+import { NewsFeed, ValueCache, AveragePrice, Donut, Timeseries, Volatility, Rune } from './Components'
 import { executeFunction } from './Functions'
 import 'semantic-ui-css/semantic.min.css';
 import { Grid, Menu, Dropdown, Image } from 'semantic-ui-react'
@@ -11,6 +11,8 @@ class App extends Component {
   // Character array now part of state and so can be altered
   state = {
     selectedSyms: [],
+    selectedCounter: 0,
+    displayRune: false,
     activeIndex: 0,
     functions: [
       'maxminfunc',
@@ -33,11 +35,13 @@ class App extends Component {
       key: item.sym,
       text: item.sym,
       value: item.sym,
+      color: item.sym
     }))
     var selectedSyms = syms.map(item => item.sym)
     this.setState({
       stateOptions,
-      selectedSyms
+      selectedSyms,
+      selectedCounter: selectedSyms.length
     })
 
   }
@@ -55,14 +59,29 @@ class App extends Component {
     })
   }
 
+    displayNew = () => {
+      this.setState({
+        displayRune: !this.state.displayRune,
+      })
+    }
+
   render() {
     // var selectedSyms= this.state.selectedSyms
 
     if (!this.state.selectedSyms.length) { return <div>Loading table...</div> }
     return (
       <div className="dashboard">
+        { this.state.displayRune ?
+        <Rune/> :
+        <div>
         <Menu className='fixHeight' size='massive' inverted fluid>
-          <Image src={logo} size='tiny' />
+          <Image src={logo} size='tiny' 
+          onClick={
+            this.displayNew
+          }
+          />
+          <Menu.Item id='counter'>{this.state.selectedSyms.length} / {this.state.selectedCounter} <br /> Syms Selected </Menu.Item>
+
           <Dropdown
             multiple search selection fluid
             placeholder='Select Syms'
@@ -77,7 +96,7 @@ class App extends Component {
               < Donut query={this.state.functions[1]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
             <Grid.Column width={6}>
-              <ValueCache query={this.state.functions[3]} />
+              <ValueCache syms={this.state.syms} query={this.state.functions[3]} />
             </Grid.Column>
           </Grid.Row>
 
@@ -88,14 +107,7 @@ class App extends Component {
             <Grid.Column width={9}>
               <Timeseries hdbquery={this.state.functions[7]} rdbquery={this.state.functions[5]} selectedSyms={this.state.selectedSyms} />
             </Grid.Column>
-
           </Grid.Row>
-
-          {/* <Grid.Row className="charts">
-            <Grid.Column width={16}>
-              <AveragePrice query={this.state.functions[6]} syms={this.state.functions[2]} />
-            </Grid.Column>
-          </Grid.Row> */}
 
           <Grid.Row className="table">
             <Grid.Column width={16}>
@@ -108,8 +120,9 @@ class App extends Component {
               <NewsFeed />
             </Grid.Column>
           </Grid.Row>
-
         </Grid>
+        </div>
+        }
       </div>
     )
   }

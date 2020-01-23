@@ -29,10 +29,30 @@ class Timeseries extends Component {
               },
               chart: {
                 type: 'area',
-                height: 350
+                height: 350,
+                animations:{
+                  enabled: false
+                },
+                zoom: {
+                  enabled: true,
+                  type: 'x',  
+                  autoScaleYaxis: true,  
+                  zoomedArea: {
+                    fill: {
+                      color: '#90CAF9',
+                      opacity: 0.4
+                    },
+                    stroke: {
+                      color: '#0D47A1',
+                      opacity: 0.4,
+                      width: 1
+                    },
+                  },
+                }
               },
-              colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-                 '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
+              colors: ['#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', 
+              '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                 ],
               annotations: {
                 yaxis: [{
                   y: 30,
@@ -106,7 +126,7 @@ class Timeseries extends Component {
       componentDidMount() {
         // this.setState.changeDate()
         this.updateState(this.props.rdbquery, this.props.hdbquery)
-        this.interval = setInterval(() => this.updateState(this.props.rdbquery, this.props.hdbquery), 300000)
+        this.interval = setInterval(() => this.updateState(this.props.rdbquery, this.props.hdbquery), 60000)
       }
     
       // Garbage collection

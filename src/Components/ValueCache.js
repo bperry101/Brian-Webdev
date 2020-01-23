@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash'
 import { executeFunction } from '../Functions'
 import { Table, Icon } from 'semantic-ui-react'
 import { Header, Card } from 'semantic-ui-react'
@@ -9,6 +10,11 @@ class ValueCache extends Component {
     super();
     this.state = {
       data:{},
+      column: {
+        h: 'sym'
+      },
+      direction: null,
+      sort: 0,
     }
   }
 
@@ -28,18 +34,83 @@ class ValueCache extends Component {
     clearInterval(this.interval)
   }
 
+  handleSort = (clickedColumn) => () => {
+    const { column, direction } = this.state
+
+    if (column !== clickedColumn.h && clickedColumn.h !== 'Change') {
+      this.setState({
+        column: clickedColumn.h,
+        // data: _.sortBy(data, [clickedColumn.h]),
+        direction: 'ascending',
+      })
+      return
+    }
+    if (clickedColumn.h !== 'Change') {
+      this.setState({
+        direction: direction === 'ascending' ? 'descending' : 'ascending',
+      })
+    }
+    
+  }
+
+  sorting = (data) => {
+    const { column, direction } = this.state
+    if (column == 'Sym') {
+      if (direction == 'ascending') {
+          return _.sortBy(data, ['sym'])
+      } else if (direction == 'descending') {
+        return  _.sortBy(data, ['sym']).reverse()
+      }
+
+    } else if (column == 'Min Traded Price') {
+      if (direction == 'ascending') {
+          return _.sortBy(data, ['mintradedprice'])
+      } else if (direction == 'descending') {
+        return  _.sortBy(data, ['mintradedprice']).reverse()
+      }
+
+    } else if (column == 'Max Traded Price') {
+      if (direction == 'ascending') {
+          return _.sortBy(data, ['maxtradedprice'])
+      } else if (direction == 'descending') {
+        return  _.sortBy(data, ['maxtradedprice']).reverse()
+      }
+    }
+
+    else if (column == 'Last Traded Price') {
+      if (direction == 'ascending') {
+          return _.sortBy(data, ['lasttradedprice'])
+      } else if (direction == 'descending') {
+        return  _.sortBy(data, ['lasttradedprice']).reverse()
+      }
+    } 
+    else {
+      return data
+    }
+  }
+
+  setAsc = () => {
+    return <Icon sort ascending />
+  }
+
   // Render content
   render() {
+    const { column, direction } = this.state
+    const data = this.sorting(this.state.data)
     // Stall if data is not yet loaded (placeholder)
     if (!Object.entries(this.state.data).length) { 
       return <div>Loading table...</div> 
     }
-    const data = this.state.data
     // const headers = Object.keys(data[0])
-    const headers = ['Sym', 'Min Traded Price', 'Last Traded Price', 'Max Traded Price', 'Change']
+    const headers = ['Sym', 'Min Traded Price', 'Max Traded Price', 'Last Traded Price', 'Change']
     const TableHeader = (props) => {
       const header = props.headers.map((h,i) => { 
-        return <Table.HeaderCell key={i}><div>{h}</div></Table.HeaderCell> 
+        return <Table.HeaderCell 
+        key={i}
+        sorted={column === {h} ? direction : null}
+        onClick={this.handleSort({h})}
+        >{h} { h==column  ?  direction == 'ascending' ? <Icon name='sort ascending' />: <Icon name='sort descending' />  : "" }
+        </Table.HeaderCell> 
       })
       return <Table.Header><Table.Row>{header}</Table.Row></Table.Header>
     }

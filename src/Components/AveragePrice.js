@@ -21,7 +21,7 @@ class AveragePrice extends Component {
     // When component mounts, run updateState() every interval
     componentDidMount() {
       this.updateState(this.props.query)
-      this.interval = setInterval(() => this.updateState(this.props.query), 3000000)
+      this.interval = setInterval(() => this.updateState(this.props.query), 30000)
     }
   
     // Garbage collection
@@ -40,11 +40,33 @@ class AveragePrice extends Component {
     })
     const series = prices
     const chartOptions = {
-      colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-      '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
+      colors: ['#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+      '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+      ],
       dataLabels: {
         enabled: false
       },
+      chart:{
+        animations:{
+          enabled: false
+        },
+        zoom: {
+          enabled: true,
+          type: 'x',  
+          autoScaleYaxis: true,  
+          zoomedArea: {
+            fill: {
+              color: '#90CAF9',
+              opacity: 0.4
+            },
+            stroke: {
+              color: '#0D47A1',
+              opacity: 0.4,
+              width: 1
+            }
+          }
+        }
+     },
       legend:{
         itemMargin: {
           vertical: 30

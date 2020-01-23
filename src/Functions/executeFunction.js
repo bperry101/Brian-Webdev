@@ -25,13 +25,3 @@ const executeFunction = async(fname, fargs) => {
 }
 
 export default executeFunction;
-
-/*
-  Pivoting function for RDB
-
-  piv:{ 
-    t:select max price by sym, 60 xbar time.minute from trade; 
-    h:asc exec distinct sym from t; 
-    fills exec h#sym!price by time:minute from t 
-    }
-*/

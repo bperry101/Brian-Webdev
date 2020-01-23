@@ -1,0 +1,11 @@
+.rune {
+    background: url('../Images/osrsbg.png');
+    background-size:contain;
+    background-position:top;
+    background: cover;
+    height: 100vh;
+  }
+  ​
+  .grid-pos {
+    margin-top: 75px;
+  }

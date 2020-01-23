@@ -40,9 +40,9 @@
     text-align: center !important
 }
 
-.donut-container {
+/* .donut-container {
     display: flex;
-}
+} */
 
 .donut-table {
     margin: 0 !important;
@@ -93,3 +93,7 @@
     margin-top: 15px !important;
     font-size: 1.2em !important;
 }
+
+#counter {
+    text-align: center;
+  }
